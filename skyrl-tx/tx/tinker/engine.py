@@ -102,7 +102,15 @@ class TinkerEngine:
         """Initialize the engine with a database connection and base model."""
         self.config = config
         db_url = get_database_url(config.database_url)
-        self.db_engine = create_engine(db_url, echo=False)
+
+        # Configure connection pooling (ignored for SQLite)
+        self.db_engine = create_engine(
+            db_url,
+            echo=False,
+            pool_size=config.db_pool_size,
+            pool_pre_ping=True,
+            pool_recycle=config.db_pool_recycle,
+        )
         # Store LoRA model metadata (model_id -> metadata)
         self.models: dict[str, types.ModelMetadata] = {}
         # Store accumulated gradients per LoRA adapter (model_id -> accumulated gradients)

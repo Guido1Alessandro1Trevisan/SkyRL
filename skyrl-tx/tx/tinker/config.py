@@ -18,6 +18,14 @@ class EngineConfig(BaseModel):
         default=None,
         description="Database URL (e.g., postgresql://user:password@localhost:5432/tinker). If not set, uses TX_DATABASE_URL env var or defaults to SQLite",
     )
+    db_pool_size: int = Field(
+        default=10,
+        description="Database connection pool size (ignored for SQLite)",
+    )
+    db_pool_recycle: int = Field(
+        default=3600,
+        description="Recycle database connections after this many seconds to prevent stale connections",
+    )
     max_lora_adapters: int = Field(default=32, description="Maximum number of LoRA adapters")
     max_lora_rank: int = Field(default=32, description="Maximum LoRA rank")
     tensor_parallel_size: int = Field(default=1, description="Tensor parallelism degree to use for the model")

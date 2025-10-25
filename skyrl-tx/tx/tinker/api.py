@@ -42,7 +42,15 @@ async def lifespan(app: FastAPI):
 
     # Get database URL from config or environment
     db_url = get_async_database_url(app.state.engine_config.database_url)
-    app.state.db_engine = create_async_engine(db_url, echo=False)
+
+    # Configure connection pooling (ignored for SQLite)
+    app.state.db_engine = create_async_engine(
+        db_url,
+        echo=False,
+        pool_size=app.state.engine_config.db_pool_size,
+        pool_pre_ping=True,
+        pool_recycle=app.state.engine_config.db_pool_recycle,
+    )
 
     async with app.state.db_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
