@@ -702,8 +702,8 @@ class TinkerEngine:
                     adapter_indices=adapter_indices,
                 )
 
-                if sample_idx == 0 and prompt_logprobs_array is not None:
-                    prompt_logprobs = prompt_logprobs_array[0].tolist()
+                if not request_data.prompt_logprobs:
+                    prompt_logprobs = []
 
                 # Extract the generated tokens (excluding the prompt)
                 prompt_len = len(prompt_tokens)

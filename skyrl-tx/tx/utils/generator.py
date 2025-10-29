@@ -76,11 +76,7 @@ def compute_prompt_logprobs(prefill_logits: jax.Array, input_ids: jax.Array) -> 
     logits_for_prompt = prefill_logits[:, :-1, :]
     log_probs = jax.nn.log_softmax(logits_for_prompt, axis=-1)
     prompt_tokens = input_ids[:, 1:]
-    prompt_logprobs = jnp.take_along_axis(
-        log_probs, 
-        prompt_tokens[..., None], 
-        axis=-1
-    ).squeeze(-1)
+    prompt_logprobs = jnp.take_along_axis(log_probs, prompt_tokens[..., None], axis=-1).squeeze(-1)
     return prompt_logprobs
 
 
